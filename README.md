@@ -1,6 +1,11 @@
 # SynthText
 Code for generating synthetic text images as described in ["Synthetic Data for Text Localisation in Natural Images", Ankush Gupta, Andrea Vedaldi, Andrew Zisserman, CVPR 2016](http://www.robots.ox.ac.uk/~vgg/data/scenetext/).
 
+Modifications to support other scripts:
+- In Chinese: https://github.com/JarveeLee/SynthText_Chinese_version
+- In Japanese: https://github.com/gachiemchiep/SynthText 
+- In Persian and Arabic (right-to-left languages): https://github.com/adavoudi/SynthText
+- In Bangla: https://github.com/MichalBusta/E2E-MLT
 
 **Synthetic Scene-Text Image Samples**
 ![Synthetic Scene-Text Samples](samples.png "Synthetic Samples")
