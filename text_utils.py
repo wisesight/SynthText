@@ -103,7 +103,7 @@ class RenderFont(object):
 
         # text-source : gets english text:
         self.text_source = TextSource(min_nchar=self.min_nchar,
-                                      fn=osp.join(data_dir,'newsgroup/newsgroup.txt'))
+                                      fn=osp.join(data_dir,'newsgroup/newsgroup1.txt'))
 
         # get font-state object:
         self.font_state = FontState(data_dir)
@@ -421,6 +421,7 @@ class FontState(object):
         with open(char_freq_path,'rb') as f:
             #self.char_freq = cp.load(f)
             u = pickle._Unpickler(f)
+            # u.encoding = 'latin1'
             u.encoding = 'latin1'
             p = u.load()
             self.char_freq = p
@@ -429,6 +430,7 @@ class FontState(object):
         with open(font_model_path,'rb') as f:
             #self.font_model = cp.load(f)
             u = pickle._Unpickler(f)
+            # u.encoding = 'latin1'
             u.encoding = 'latin1'
             p = u.load()
             self.font_model = p

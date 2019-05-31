@@ -1,0 +1,3 @@
+other_fonts/Prompt-MediumItalic.ttf
+other_fonts/Prompt-Thin.ttf
+other_fonts/Kanit-Bold.ttf
