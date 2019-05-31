@@ -51,6 +51,7 @@ def viz_textbb(text_im, charBB_list, wordBB, alpha=1.0):
     plt.show(block=False)
 
 def main(db_fname):
+    dt = h5py.special_dtype(vlen=str)
     db = h5py.File(db_fname, 'r')
     dsets = sorted(db['data'].keys())
     print ("total number of images : ", colorize(Color.RED, len(dsets), highlight=True))
@@ -59,6 +60,7 @@ def main(db_fname):
         charBB = db['data'][k].attrs['charBB']
         wordBB = db['data'][k].attrs['wordBB']
         txt = db['data'][k].attrs['txt']
+        txt = [n.decode("utf-8", "ignore") for n in txt]
 
         viz_textbb(rgb, [charBB], wordBB)
         print ("image name        : ", colorize(Color.RED, k, bold=True))

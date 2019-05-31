@@ -5,7 +5,7 @@ from collections import Counter
 import pickle
 
 cnt = 0
-filename = './data/newsgroup/newsgroup.txt'
+filename = './data/newsgroup/newsgroup_th.txt'
 with open(filename) as f:
     c = Counter()
     for x in f:
