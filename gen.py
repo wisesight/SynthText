@@ -78,10 +78,10 @@ def add_res_to_db(imgname,res,db):
     db['data'][dname].attrs['txt'] = L
 
 
-def main(viz=False):
+def main(DB_FNAME, viz=False):
   # open databases:
   print (colorize(Color.BLUE,'getting data..',bold=True))
-  db = get_data()
+  db = h5py.File(DB_FNAME,'r')
   print (colorize(Color.BLUE,'\t-> done',bold=True))
 
   # open the output h5 file:
@@ -141,5 +141,6 @@ if __name__=='__main__':
   import argparse
   parser = argparse.ArgumentParser(description='Genereate Synthetic Scene-Text Images')
   parser.add_argument('--viz',action='store_true',dest='viz',default=False,help='flag for turning on visualizations')
+  parser.add_argument('-h5','--h5file',help='path to h5 file')
   args = parser.parse_args()
-  main(args.viz)
+  main(args.h5file,args.viz)

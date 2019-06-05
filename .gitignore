@@ -24,6 +24,9 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+h5_data/
+tf/
+results/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -90,3 +93,6 @@ ENV/
 .ropeproject
 FCRN-DepthPrediction/
 .DS_Store
+imnames.cp
+results/SynthText.h5
+8010_dset.h5
