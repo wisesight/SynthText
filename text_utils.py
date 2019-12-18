@@ -56,11 +56,15 @@ def crop_safe(arr, rect, bbs=[], pad=0):
     the adjusted bounding-boxes
     """
     rect = np.array(rect)
+    # img = Image.fromarray(arr)
+    # img.show()
     rect[:2] -= pad
     rect[2:] += 2 * pad
     v0 = [max(0, rect[0]), max(0, rect[1])]
     v1 = [min(arr.shape[0], rect[0] + rect[2]), min(arr.shape[1], rect[1] + rect[3])]
     arr = arr[v0[0] : v1[0], v0[1] : v1[1], ...]
+    # img = Image.fromarray(arr)
+    # img.show()
     if len(bbs) > 0:
         for i in range(len(bbs)):
             bbs[i, 0] -= v0[0]
@@ -177,7 +181,7 @@ class RenderFont(object):
         # crop the surface to fit the text:
         bbs = np.array(bbs)
         surf_arr, bbs = crop_safe(
-            pygame.surfarray.pixels_alpha(surf), rect_union, bbs, pad=5
+            pygame.surfarray.pixels_alpha(surf), rect_union, bbs, pad=0
         )
         surf_arr = surf_arr.swapaxes(0, 1)
         # self.visualize_bb(surf_arr,bbs)
@@ -188,13 +192,16 @@ class RenderFont(object):
         wl = len(word_text)
         lspace = font.get_sized_height() + 1
         lbound = font.get_rect(word_text)
+        # print(word_text, lspace, lbound)
         fsize = (round(2.0 * lbound.width), round(5 * lspace))
         surf = pygame.Surface(fsize, pygame.locals.SRCALPHA, 32)
-
+    
         ### place middle char
         rect = font.get_rect(word_text[0])
-        rect.centerx = surf.get_rect().centerx
-        rect.centery = surf.get_rect().centery + rect.height
+        # rect.centerx = surf.get_rect().centerx 
+        # rect.centery = surf.get_rect().centery + rect.height
+        rect.centerx = 20
+        rect.centery = 100 + rect.height
 
         first_bounds = font.render_to(surf, rect, word_text[0])
         first_bounds.x = rect.x + first_bounds.x
@@ -268,10 +275,9 @@ class RenderFont(object):
         # crop the surface to fit the text:
         bbs = np.array(bbs)
         surf_arr, bbs = crop_safe(
-            pygame.surfarray.pixels_alpha(surf), rect_union, bbs, pad=5
+            pygame.surfarray.pixels_alpha(surf), rect_union, bbs, pad=0
         )
         surf_arr = surf_arr.swapaxes(0, 1)
-
         return surf_arr, word_text, bbs
 
 
@@ -578,6 +584,8 @@ class RenderFont(object):
 
             # blit the text onto the canvas
             w, h = text_arrs[i].shape
+            img = Image.fromarray(text_arrs[i])
+            # img.show()
             out_arr[loc[0] : loc[0] + w, loc[1] : loc[1] + h] += text_arrs[i]
 
         return out_arr, locs, bbs, order

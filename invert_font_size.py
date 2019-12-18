@@ -24,7 +24,7 @@ FS = FontState()
 #plt.hold(True)
 for i in range(len(FS.fonts)):
 	print(i)
-	font = freetype.Font(FS.fonts[i], size=12)
+	font = freetype.Font(FS.fonts[i], size=15)
 	h = []
 	for y in ys:
 		h.append(font.get_sized_glyph_height(np.float64(y)))

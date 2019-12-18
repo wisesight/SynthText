@@ -283,7 +283,7 @@ def get_text_placement_mask(xyz,mask,plane,pad=2,viz=False):
         plt.imshow(mask)
         plt.subplot(1,2,2)
         plt.imshow(~place_mask)
-        plt.hold(True)
+        # plt.hold(True)
         for i in range(len(pts_fp_i32)):
             plt.scatter(pts_fp_i32[i][:,0],pts_fp_i32[i][:,1],
                         edgecolors='none',facecolor='g',alpha=0.5)
@@ -353,7 +353,7 @@ def viz_textbb(fignum,text_im, bb_list,alpha=1.0):
     plt.close(fignum)
     plt.figure(fignum)
     plt.imshow(text_im)
-    plt.hold(True)
+    # plt.hold(True)
     H,W = text_im.shape[:2]
     for i in range(len(bb_list)):
         bbs = bb_list[i]
@@ -404,7 +404,7 @@ class RendererV3(object):
         regions['place_mask'] = masks
         regions['homography'] = Hs
         regions['homography_inv'] = Hinvs
-
+        
         return regions
 
     def nice_homography(H):
@@ -727,6 +727,8 @@ class RendererV3(object):
 
             if  placed:
                 # at least 1 word was placed in this instance:
+                # imge = Image.fromarray(img)
+                # imge.show()
                 idict['img'] = img
                 idict['txt'] = itext
                 idict['charBB'] = np.concatenate(ibb, axis=2)

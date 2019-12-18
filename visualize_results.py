@@ -14,6 +14,7 @@ matplotlib.use("agg")
 import matplotlib.pyplot as plt
 import h5py
 from common import *
+from PIL import Image
 
 
 def viz_textbb(text_im, charBB_list, wordBB, alpha=1.0):
@@ -25,6 +26,8 @@ def viz_textbb(text_im, charBB_list, wordBB, alpha=1.0):
     plt.close(1)
     plt.figure(1)
     plt.imshow(text_im)
+    img = Image.fromarray(text_im)
+    img.show()
     # plt.hold(True)
     H, W = text_im.shape[:2]
 
