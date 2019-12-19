@@ -96,3 +96,5 @@ FCRN-DepthPrediction/
 imnames.cp
 results/SynthText.h5
 8010_dset.h5
+*cropped*
+*.h5*
