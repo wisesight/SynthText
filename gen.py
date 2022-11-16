@@ -19,6 +19,7 @@ import os.path as osp
 from synthgen import *
 from common import *
 import wget, tarfile
+import json
 
 
 ## Define some configuration variables:
@@ -77,6 +78,18 @@ def add_res_to_db(imgname,res,db):
     L = [n.encode("utf-8", "ignore") for n in L]
     db['data'][dname].attrs['txt'] = L
 
+def write_res(imgname, res, out_dir):
+    for nth_instance, _res in enumerate(res):
+      _img_filename = imgname[:imgname.rfind('.')]
+      json_filename = f"{_img_filename}_{str(nth_instance)}.json"
+      img_filename = f"{_img_filename}_{str(nth_instance)}.jpg"
+      img = _res.pop("img")
+      _res["wordBB"] = _res["wordBB"].T.tolist()
+      _res["charBB"] = _res["charBB"].T.tolist()
+      Image.fromarray(img).convert("RGB").save(osp.join(out_dir, img_filename))
+
+      with open(osp.join(out_dir, "gt",json_filename), "w") as json_file:
+        json.dump(_res, json_file)
 
 def main(DB_FNAME, viz=False):
   # open databases:
@@ -85,8 +98,8 @@ def main(DB_FNAME, viz=False):
   print (colorize(Color.BLUE,'\t-> done',bold=True))
 
   # open the output h5 file:
-  out_db = h5py.File(OUT_FILE,'w')
-  out_db.create_group('/data')
+  # out_db = h5py.File(OUT_FILE,'w')
+  # out_db.create_group('/data')
   print (colorize(Color.GREEN,'Storing the output in: '+OUT_FILE, bold=True))
 
   # get the names of the image files in the dataset:
@@ -124,7 +137,7 @@ def main(DB_FNAME, viz=False):
                             ninstance=INSTANCE_PER_IMAGE,viz=viz)
       if len(res) > 0:
         # non-empty : successful in placing text:
-        add_res_to_db(imname,res,out_db)
+        write_res(imname,res,"results")
       # visualize the output:
       if viz:
         if 'q' in input(colorize(Color.RED,'continue? (enter to continue, q to exit): ',True)):
@@ -134,7 +147,7 @@ def main(DB_FNAME, viz=False):
       print (colorize(Color.GREEN,'>>>> CONTINUING....', bold=True))
       continue
   db.close()
-  out_db.close()
+  # out_db.close()
 
 
 if __name__=='__main__':
@@ -143,4 +156,4 @@ if __name__=='__main__':
   parser.add_argument('--viz',action='store_true',dest='viz',default=False,help='flag for turning on visualizations')
   parser.add_argument('-h5','--h5file',help='path to h5 file')
   args = parser.parse_args()
-  main(args.h5file,args.viz)
+  main("data/dset.h5",args.viz)
