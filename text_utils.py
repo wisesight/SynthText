@@ -25,10 +25,11 @@ from common import *
 
 matplotlib.use("agg")
 
-up_vowel = [ 'ึ', 'ี', 'ี', 'ั', 'ํ', '็', '้', '๋', '่', '์', 'ื', 'ิ', '๊']
-down_vowel = ['ุ', 'ู']
-th_char = [i for i in 'กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรลวศษสหฬอฮ']
-um_vowel = ['ำ']
+up_vowel = ["ึ", "ี", "ี", "ั", "ํ", "็", "้", "๋", "่", "์", "ื", "ิ", "๊"]
+down_vowel = ["ุ", "ู"]
+th_char = [i for i in "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรลวศษสหฬอฮ"]
+o_oi_oi_vowel = ["โ", "ใ", "ไ"] 
+um_vowel = ["ำ"]
 
 
 def sample_weighted(p_dict):
@@ -132,7 +133,7 @@ class RenderFont(object):
         """
         renders multiline TEXT on the pygame surface SURF with the
         font style FONT.
-        A new line in text is denoted by \n, no other characters are 
+        A new line in text is denoted by \n, no other characters are
         escaped. Other forms of white-spaces should be converted to space.
 
         returns the updated surface, words and the character bounding boxes.
@@ -187,7 +188,6 @@ class RenderFont(object):
         # self.visualize_bb(surf_arr,bbs)
         return surf_arr, words, bbs
 
-    
     def render_curved(self, font, word_text):
         wl = len(word_text)
         lspace = font.get_sized_height() + 1
@@ -195,10 +195,10 @@ class RenderFont(object):
         # print(word_text, lspace, lbound)
         fsize = (round(2.0 * lbound.width), round(5 * lspace))
         surf = pygame.Surface(fsize, pygame.locals.SRCALPHA, 32)
-    
+
         ### place middle char
         rect = font.get_rect(word_text[0])
-        # rect.centerx = surf.get_rect().centerx 
+        # rect.centerx = surf.get_rect().centerx
         # rect.centery = surf.get_rect().centery + rect.height
         rect.centerx = 20
         rect.centery = 100 + rect.height
@@ -226,19 +226,26 @@ class RenderFont(object):
 
             ch_idx.append(i)
             ch = word_text[i]
-            if i != wl-1:
-                next_ch = word_text[i+1]
+            if i != wl - 1:
+                next_ch = word_text[i + 1]
 
             newrect = font.get_rect(ch)
             newrect.y = last_rect.y
-            if last_ch in up_vowel and ch in up_vowel or next_ch in um_vowel:
+            # สระ + วรรณยุกต์, สระอำ
+            if (last_ch in up_vowel or next_ch in um_vowel) and (ch in up_vowel):
                 newrect.topleft = (
-                    last_char_rect.bottomright[0] + 2,
+                    last_char_rect.bottomright[0],
                     last_rect.topleft[1] - newrect.height,
                 )
+            elif last_ch in o_oi_oi_vowel or last_ch in um_vowel:
+                newrect.topleft = (
+                    last_char_rect.bottomright[0] - 6,
+                    last_rect.topleft[1],
+                )
+                
             elif ch in up_vowel:
                 newrect.topleft = (
-                    last_char_rect.bottomright[0] + 2,
+                    last_char_rect.bottomright[0] + 1,
                     last_rect.topleft[1] - 2,
                 )
             elif ch in down_vowel:
@@ -251,6 +258,8 @@ class RenderFont(object):
                     last_char_rect.bottomright[0] + 2,
                     last_char_rect.topleft[1],
                 )
+
+
             bbrect = font.render_to(surf, newrect, ch)
             bbrect.x = newrect.x + bbrect.x
             bbrect.y = newrect.y - bbrect.y
@@ -279,7 +288,6 @@ class RenderFont(object):
         )
         surf_arr = surf_arr.swapaxes(0, 1)
         return surf_arr, word_text, bbs
-
 
     def fen__render_curved(self, font, word_text):
         wl = len(word_text)
@@ -380,7 +388,7 @@ class RenderFont(object):
                     )
             else:
                 if ch in down_vowel:
-   
+
                     newrect.topright = (
                         last_char_rect.topright[0] - newrect.width + 2,
                         last_char_rect.topright[1] + 3,
@@ -694,7 +702,7 @@ class RenderFont(object):
 
 class FontState(object):
     """
-    Defines the random state of the font rendering  
+    Defines the random state of the font rendering
     """
 
     size = [50, 10]  # normal dist mean, std
